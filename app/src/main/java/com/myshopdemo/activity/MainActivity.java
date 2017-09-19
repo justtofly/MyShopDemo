@@ -8,6 +8,7 @@ import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.myshopdemo.R;
 import com.myshopdemo.base.BaseFragment;
 import com.myshopdemo.center.fragment.CenterFragment;
 import com.myshopdemo.find.fragment.FindFragment;
@@ -103,7 +104,7 @@ public class MainActivity extends FragmentActivity {
      */
     private void initFragment() {
         //创建集合
-        mFragments=new ArrayList<>();
+        mFragments = new ArrayList<>();
         mFragments.add(new HomeFragment());//主页
         mFragments.add(new TypeFragment());//分类
         mFragments.add(new FindFragment());//发现
@@ -113,31 +114,33 @@ public class MainActivity extends FragmentActivity {
 
     /**
      * 根据不同的位置，取不同的fragment
+     *
      * @param position
      * @return
      */
-    private BaseFragment getFragment(int position){
-        if(mFragments!=null&&mFragments.size()>0){
-            BaseFragment baseFragment=mFragments.get(position);
+    private BaseFragment getFragment(int position) {
+        if (mFragments != null && mFragments.size() > 0) {
+            BaseFragment baseFragment = mFragments.get(position);
             return baseFragment;
         }
         return null;
     }
-    private void switchFragment(Fragment fromFragment,BaseFragment nextFragment){
-        if (tempFragment!=nextFragment){
-            tempFragment=nextFragment;
-            if (nextFragment!=null){
-                FragmentTransaction transation=getSupportFragmentManager().beginTransaction();
+
+    private void switchFragment(Fragment fromFragment, BaseFragment nextFragment) {
+        if (tempFragment != nextFragment) {
+            tempFragment = nextFragment;
+            if (nextFragment != null) {
+                FragmentTransaction transation = getSupportFragmentManager().beginTransaction();
                 //判断nextFragment是否添加
-                if(!nextFragment.isAdded()){
+                if (!nextFragment.isAdded()) {
                     //隐藏当前的Fragment,添加下一个Fragment,并显示下一个Fragment
-                    if(fromFragment!=null){
+                    if (fromFragment != null) {
                         transation.hide(fromFragment);
                     }
-                    transation.add(R.id.fl,nextFragment).commit();
-                }else {
+                    transation.add(R.id.fl, nextFragment).commit();
+                } else {
                     //隐藏当前的Fragment
-                    if(fromFragment!=null){
+                    if (fromFragment != null) {
                         transation.hide(fromFragment);
                     }
                     transation.show(nextFragment).commit();

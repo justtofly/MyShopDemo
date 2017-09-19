@@ -8,8 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.myshopdemo.activity.R;
+import com.myshopdemo.R;
 import com.myshopdemo.base.BaseFragment;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import okhttp3.Call;
 
 /**
  * 创建者     yangyanfei
@@ -71,5 +75,36 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void initData() {
         super.initData();
+        Log.e("TAG", "主页数据被初始化");
+
+        String url = "http://www.csdn.net/";
+        OkHttpUtils
+                .get()
+                .url(url)
+                .addParams("username", "hyman")
+                .addParams("password", "123")
+                .build()
+                .execute(new StringCallback() {
+                    /**
+                     * 当请求失败的时候回调
+                     * @param call
+                     * @param e
+                     * @param id
+                     */
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        Log.e("TAG","请求失败："+e.getMessage());
+                    }
+
+                    /**
+                     * 当请求成功的时候回调
+                     * @param response
+                     * @param id
+                     */
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.e("TAG","请求成功："+response);
+                    }
+                });
     }
 }

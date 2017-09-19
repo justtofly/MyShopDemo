@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.myshopdemo.R;
+
 /**
  * 欢迎界面
  * 功能：延时两秒进入到主页面
@@ -15,7 +17,6 @@ public class WelcomeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-
         //两秒进入主页面
         new Handler().postDelayed(new Runnable() {
             @Override
