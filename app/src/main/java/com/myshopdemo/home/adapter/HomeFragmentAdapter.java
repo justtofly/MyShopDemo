@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -119,6 +120,14 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
             super(itemView);
             this.mContext=context;
             gv_channel= (GridView) itemView.findViewById(R.id.gv_channel);
+
+            //设置item的点击事件
+            gv_channel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(mContext,"position="+position,Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         public void setData(List<ResultBeanData.ResultEntity.ChannelInfoEntity> channel_info) {
