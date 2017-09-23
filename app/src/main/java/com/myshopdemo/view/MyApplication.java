@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.zhy.http.okhttp.OkHttpUtils;
 
+import org.xutils.x;
+
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -26,6 +28,10 @@ public class MyApplication extends Application {
          * 初始化OkHttpUtils
          */
         initOkhttpClient();
+        /**
+         * 初始化xUtils3
+         */
+        x.Ext.init(this);
     }
 
     private void initOkhttpClient() {

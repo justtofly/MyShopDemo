@@ -10,6 +10,12 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/integration" />
+            <option value="$PROJECT_DIR$/integration/okhttp" />
+            <option value="$PROJECT_DIR$/integration/okhttp3" />
+            <option value="$PROJECT_DIR$/integration/recyclerview" />
+            <option value="$PROJECT_DIR$/xUtils3-sample" />
+            <option value="$PROJECT_DIR$/xutils" />
           </set>
         </option>
       </GradleProjectSettings>

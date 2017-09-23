@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
-
+configurations.all {
+    resolutionStrategy.force 'com.android.support:support-annotations:23.1.0'
+}
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
@@ -24,7 +26,12 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile files('libs/android-support-v4.jar')
+    //    compile files('libs/android-support-v4.jar')
     compile 'com.android.support:recyclerview-v7:23.0.1'
     compile 'com.zhy:okhttputils:2.6.2'
+    compile project(':xutils')
+    compile 'com.alibaba:fastjson:1.1.63.android'
+    compile 'com.youth.banner:banner:1.4.10'
+    //最新版本
+    compile files('D:/project_as/month_8/MyShopDemo/library/glide-3.7.0.jar')
 }
