@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/iv_figure"
+        android:background="@drawable/logo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"/>
+    <TextView
+        android:id="@+id/tv_cover_price"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="center_horizontal"
+        android:text="Y102.00"
+        android:textSize="15sp"
+        android:textColor="#ff4c4c"/>
+    <RelativeLayout
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp">
+        <TextView
+            android:id="@+id/tv_origin_price"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Y222.00"
+            android:textColor="#9a9a9a"/>
+        <View
+            android:layout_width="70dp"
+            android:layout_height="1dp"
+            android:layout_centerInParent="true"
+            android:background="@android:color/black"/>
+    </RelativeLayout>
+
+</LinearLayout>

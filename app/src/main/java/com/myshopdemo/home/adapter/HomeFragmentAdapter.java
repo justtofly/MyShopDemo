@@ -2,6 +2,7 @@ package com.myshopdemo.home.adapter;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -91,43 +93,88 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
             return new ChannelViewHolder(mContext,mLayoutInflater.inflate(R.layout.gv_channel,null));
         }else if(viewType==ACT){//活动
             return new ActViewHolder(mContext,mLayoutInflater.inflate(R.layout.act_item,null));
+        }else if (viewType==SCKILL){//秒杀
+            return new SckillViewHolder(mContext,mLayoutInflater.inflate(R.layout.sckill_item,null));
         }
         return null;
     }
 
     /**
      * 相当于getView中的绑定数据模块
+     *
      * @param holder
      * @param position
      */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(getItemViewType(position)==BANNER){
+        if (getItemViewType(position) == BANNER) {
             //强转过后相当于得到它的实例
-            BannerViewHolder bannerViewHolder= (BannerViewHolder) holder;
+            BannerViewHolder bannerViewHolder = (BannerViewHolder) holder;
             bannerViewHolder.setData(resultEntity.getBanner_info());
-        }else if (getItemViewType(position)==CHANNEL){
-            ChannelViewHolder channelViewHolder= (ChannelViewHolder) holder;
+        } else if (getItemViewType(position) == CHANNEL) {
+            ChannelViewHolder channelViewHolder = (ChannelViewHolder) holder;
             channelViewHolder.setData(resultEntity.getChannel_info());
-        }else if (getItemViewType(position)==ACT){
-            ActViewHolder actViewHolder= (ActViewHolder) holder;
+        } else if (getItemViewType(position) == ACT) {
+            ActViewHolder actViewHolder = (ActViewHolder) holder;
             actViewHolder.setData(resultEntity.getAct_info());
+        } else if (getItemViewType(position) == SCKILL) {
+            SckillViewHolder sckillViewHolder = (SckillViewHolder) holder;
+            sckillViewHolder.setData(resultEntity.getSeckill_info());
+        }
+    }
+
+    class SckillViewHolder extends RecyclerView.ViewHolder{
+        private Context      mContext;
+        //实例化控件
+        private TextView     tv_time_seckill;
+        private TextView     tv_more_seckill;
+        private RecyclerView rv_seckill;
+        private ResultBeanData.ResultEntity.SeckillInfoEntity mData;
+        //声明适配器
+        private SeckillRecyclerViewAdapter mSeckillRecyclerViewAdapter;
+
+        public SckillViewHolder(Context context, View itemView) {
+            super(itemView);
+            this.mContext = context;
+            tv_time_seckill = (TextView) itemView.findViewById(R.id.tv_time_seckill);
+            tv_more_seckill = (TextView) itemView.findViewById(R.id.tv_more_seckill);
+            rv_seckill = (RecyclerView) itemView.findViewById(R.id.rv_seckill);
+        }
+
+        public void setData(ResultBeanData.ResultEntity.SeckillInfoEntity data) {
+            mData = data;
+            //得到数据了
+            //设置适配器：文本和RecyclerView数据
+            mSeckillRecyclerViewAdapter=new SeckillRecyclerViewAdapter(mContext,data.getList());
+            rv_seckill.setAdapter(mSeckillRecyclerViewAdapter);
+
+            //设置布局管理器
+            rv_seckill.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.HORIZONTAL,false));
+
+            //设置item的点击事件,通过接口回调实现监听点击事件
+            mSeckillRecyclerViewAdapter.setOnSeckillRecyclerView(new SeckillRecyclerViewAdapter.OnSeckillRecyclerView() {
+                @Override
+                public void onItemClick(int position) {
+                    Toast.makeText(mContext,"秒杀XX="+position,Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
     /**
      * 活动的ViewHolder
      */
-    class ActViewHolder extends RecyclerView.ViewHolder{
-        private Context mContext;
-        private ViewPager mViewPager;
+    class ActViewHolder extends RecyclerView.ViewHolder {
+        private Context    mContext;
+        private ViewPager  mViewPager;
         //声明活动适配器
         private ActAdapter mActAdapter;
-        public ActViewHolder(Context context,View itemView) {
-            super(itemView);
-            this.mContext=context;
 
-            mViewPager= (ViewPager) itemView.findViewById(R.id.act_vp);
+        public ActViewHolder(Context context, View itemView) {
+            super(itemView);
+            this.mContext = context;
+
+            mViewPager = (ViewPager) itemView.findViewById(R.id.act_vp);
         }
 
         public void setData(List<ResultBeanData.ResultEntity.ActInfoEntity> act_info) {
@@ -135,27 +182,29 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
             mViewPager.setPageMargin(20);
             //1.有数据了
             //2.设置适配器
-            mActAdapter=new ActAdapter(mContext,act_info);
+            mActAdapter = new ActAdapter(mContext, act_info);
             mViewPager.setAdapter(mActAdapter);
         }
     }
+
     /**
      * 频道的ViewHolder
      */
-    class ChannelViewHolder extends RecyclerView.ViewHolder{
-        private Context mContext;
-        private GridView gv_channel;
+    class ChannelViewHolder extends RecyclerView.ViewHolder {
+        private Context        mContext;
+        private GridView       gv_channel;
         private ChannelAdapter channelAdapter;
+
         public ChannelViewHolder(Context context, View itemView) {
             super(itemView);
-            this.mContext=context;
-            gv_channel= (GridView) itemView.findViewById(R.id.gv_channel);
+            this.mContext = context;
+            gv_channel = (GridView) itemView.findViewById(R.id.gv_channel);
 
             //设置item的点击事件
             gv_channel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(mContext,"position="+position,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "position=" + position, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -171,25 +220,25 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
     /**
      * 横幅广告的ViewHolder
      */
-    class BannerViewHolder extends RecyclerView.ViewHolder{
+    class BannerViewHolder extends RecyclerView.ViewHolder {
         private Context mContext;
         //声明控件
-        private Banner banner;
+        private Banner  banner;
 
-        public BannerViewHolder(Context mContext,View itemView) {
+        public BannerViewHolder(Context mContext, View itemView) {
             super(itemView);
-            this.mContext=mContext;
+            this.mContext = mContext;
             //实例化操作
-            this.banner= (Banner) itemView.findViewById(R.id.banner);
+            this.banner = (Banner) itemView.findViewById(R.id.banner);
         }
 
         public void setData(List<ResultBeanData.ResultEntity.BannerInfoEntity> banner_info) {
             //设置Banner的数据
 
             //得到图片地址
-            List<String> imagesUrl=new ArrayList<>();
+            List<String> imagesUrl = new ArrayList<>();
             for (int i = 0; i < banner_info.size(); i++) {
-                String imgeUrl=banner_info.get(i).getImage();
+                String imgeUrl = banner_info.get(i).getImage();
                 imagesUrl.add(imgeUrl);
             }
             banner.setImages(imagesUrl).setImageLoader(new GlideImageLoader()).start();
@@ -198,11 +247,12 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
             banner.setOnBannerListener(new OnBannerListener() {
                 @Override
                 public void OnBannerClick(int position) {
-                    Toast.makeText(mContext,"position=="+position,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "position==" + position, Toast.LENGTH_SHORT).show();
                 }
             });
         }
     }
+
     class GlideImageLoader extends ImageLoader {
         @Override
         public void displayImage(Context context, Object path, ImageView imageView) {
@@ -272,6 +322,6 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         //开发过程中，从1-6
-        return 3;
+        return 4;
     }
 }
