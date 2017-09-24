@@ -1,6 +1,7 @@
 package com.myshopdemo.home.adapter;
 
 import android.content.Context;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,6 +89,8 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
             return new BannerViewHolder(mContext,mLayoutInflater.inflate(R.layout.banner_viewpager,null));
         }else if (viewType==CHANNEL) {//频道
             return new ChannelViewHolder(mContext,mLayoutInflater.inflate(R.layout.gv_channel,null));
+        }else if(viewType==ACT){//活动
+            return new ActViewHolder(mContext,mLayoutInflater.inflate(R.layout.act_item,null));
         }
         return null;
     }
@@ -106,9 +109,36 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
         }else if (getItemViewType(position)==CHANNEL){
             ChannelViewHolder channelViewHolder= (ChannelViewHolder) holder;
             channelViewHolder.setData(resultEntity.getChannel_info());
+        }else if (getItemViewType(position)==ACT){
+            ActViewHolder actViewHolder= (ActViewHolder) holder;
+            actViewHolder.setData(resultEntity.getAct_info());
         }
     }
 
+    /**
+     * 活动的ViewHolder
+     */
+    class ActViewHolder extends RecyclerView.ViewHolder{
+        private Context mContext;
+        private ViewPager mViewPager;
+        //声明活动适配器
+        private ActAdapter mActAdapter;
+        public ActViewHolder(Context context,View itemView) {
+            super(itemView);
+            this.mContext=context;
+
+            mViewPager= (ViewPager) itemView.findViewById(R.id.act_vp);
+        }
+
+        public void setData(List<ResultBeanData.ResultEntity.ActInfoEntity> act_info) {
+            //设置图片间距
+            mViewPager.setPageMargin(20);
+            //1.有数据了
+            //2.设置适配器
+            mActAdapter=new ActAdapter(mContext,act_info);
+            mViewPager.setAdapter(mActAdapter);
+        }
+    }
     /**
      * 频道的ViewHolder
      */
@@ -242,6 +272,6 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         //开发过程中，从1-6
-        return 2;
+        return 3;
     }
 }
