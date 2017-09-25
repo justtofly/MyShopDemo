@@ -1,9 +1,12 @@
 package com.myshopdemo.home.adapter;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +24,9 @@ import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.loader.ImageLoader;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -81,20 +86,21 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
     /**
      * 相当于getView，创建ViewHolder部分代码
      * 创建ViewHolder
+     *
      * @param parent
      * @param viewType 当前的类型
      * @return
      */
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(viewType==BANNER){//横幅广告
-            return new BannerViewHolder(mContext,mLayoutInflater.inflate(R.layout.banner_viewpager,null));
-        }else if (viewType==CHANNEL) {//频道
-            return new ChannelViewHolder(mContext,mLayoutInflater.inflate(R.layout.gv_channel,null));
-        }else if(viewType==ACT){//活动
-            return new ActViewHolder(mContext,mLayoutInflater.inflate(R.layout.act_item,null));
-        }else if (viewType==SCKILL){//秒杀
-            return new SckillViewHolder(mContext,mLayoutInflater.inflate(R.layout.sckill_item,null));
+        if (viewType == BANNER) {//横幅广告
+            return new BannerViewHolder(mContext, mLayoutInflater.inflate(R.layout.banner_viewpager, null));
+        } else if (viewType == CHANNEL) {//频道
+            return new ChannelViewHolder(mContext, mLayoutInflater.inflate(R.layout.gv_channel, null));
+        } else if (viewType == ACT) {//活动
+            return new ActViewHolder(mContext, mLayoutInflater.inflate(R.layout.act_item, null));
+        } else if (viewType == SCKILL) {//秒杀
+            return new SckillViewHolder(mContext, mLayoutInflater.inflate(R.layout.sckill_item, null));
         }
         return null;
     }
@@ -123,15 +129,45 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
         }
     }
 
-    class SckillViewHolder extends RecyclerView.ViewHolder{
-        private Context      mContext;
+
+
+    class SckillViewHolder extends RecyclerView.ViewHolder {
+        private Context                                       mContext;
         //实例化控件
-        private TextView     tv_time_seckill;
-        private TextView     tv_more_seckill;
-        private RecyclerView rv_seckill;
+        private TextView                                      tv_time_seckill;
+        private TextView                                      tv_more_seckill;
+        private RecyclerView                                  rv_seckill;
         private ResultBeanData.ResultEntity.SeckillInfoEntity mData;
         //声明适配器
-        private SeckillRecyclerViewAdapter mSeckillRecyclerViewAdapter;
+        private SeckillRecyclerViewAdapter                    mSeckillRecyclerViewAdapter;
+
+        /**
+         * 相差多少时间-毫秒
+         */
+        private long dt = 0;
+
+        private Handler mHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if (msg.what == 0) {
+                    //时间不断地减少
+                    dt = dt - 1000;
+                    //把毫秒变成小时的工具
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                    Log.e("TAG", "秒杀时间:" + sdf.format(new Date(dt)));
+                    String time = sdf.format(new Date(dt));
+                    tv_time_seckill.setText(time);
+
+                    //再发消息，发消息之前移除消息
+                    mHandler.removeMessages(0);
+                    mHandler.sendEmptyMessageDelayed(0, 1000);
+                    if (dt <= 0) {
+                        mHandler.removeCallbacksAndMessages(null);
+                    }
+                }
+            }
+        };
 
         public SckillViewHolder(Context context, View itemView) {
             super(itemView);
@@ -145,19 +181,24 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
             mData = data;
             //得到数据了
             //设置适配器：文本和RecyclerView数据
-            mSeckillRecyclerViewAdapter=new SeckillRecyclerViewAdapter(mContext,data.getList());
+            mSeckillRecyclerViewAdapter = new SeckillRecyclerViewAdapter(mContext, data.getList());
             rv_seckill.setAdapter(mSeckillRecyclerViewAdapter);
 
             //设置布局管理器
-            rv_seckill.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.HORIZONTAL,false));
+            rv_seckill.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
 
             //设置item的点击事件,通过接口回调实现监听点击事件
             mSeckillRecyclerViewAdapter.setOnSeckillRecyclerView(new SeckillRecyclerViewAdapter.OnSeckillRecyclerView() {
                 @Override
                 public void onItemClick(int position) {
-                    Toast.makeText(mContext,"秒杀XX="+position,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "秒杀XX=" + position, Toast.LENGTH_SHORT).show();
                 }
             });
+            //设置时间
+            dt = Integer.valueOf(data.getEnd_time()) - Integer.valueOf(data.getStart_time());
+
+            //发送延时消息
+            mHandler.sendEmptyMessageDelayed(0, 1000);
         }
     }
 
@@ -265,14 +306,14 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
              */
 
             //Glide 加载图片简单用法
-            Glide.with(context).load(Constants.BASE_URL_IMAGE+path).into(imageView);
+            Glide.with(context).load(Constants.BASE_URL_IMAGE + path).into(imageView);
 
             //Picasso 加载图片简单用法
             //Picasso.with(context).load(path).into(imageView);
 
             //用fresco加载图片简单用法，记得要写下面的createImageView方法
-//            Uri uri = Uri.parse((String) path);
-//            imageView.setImageURI(uri);
+            //            Uri uri = Uri.parse((String) path);
+            //            imageView.setImageURI(uri);
         }
 
         //提供createImageView 方法，如果不用可以不重写这个方法，主要是方便自定义ImageView的创建
@@ -286,29 +327,30 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
 
     /**
      * 得到类型
+     *
      * @param position
      * @return
      */
     @Override
     public int getItemViewType(int position) {
-        switch (position){
+        switch (position) {
             case BANNER:
-                currentType=BANNER;
+                currentType = BANNER;
                 break;
             case CHANNEL:
-                currentType=CHANNEL;
+                currentType = CHANNEL;
                 break;
             case ACT:
-                currentType=ACT;
+                currentType = ACT;
                 break;
             case SCKILL:
-                currentType=SCKILL;
+                currentType = SCKILL;
                 break;
             case RECOMMEND:
-                currentType=RECOMMEND;
+                currentType = RECOMMEND;
                 break;
             case HOT:
-                currentType=HOT;
+                currentType = HOT;
                 break;
         }
 
@@ -317,6 +359,7 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
 
     /**
      * 一共有多少个item
+     *
      * @return
      */
     @Override
