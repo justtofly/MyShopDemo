@@ -127,7 +127,7 @@ public class HomeFragment extends BaseFragment {
                      */
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.e("TAG", "请求成功：id==" + id + ",response==" );
+                        Log.e("TAG", "请求成功：id==" + id + ",response==");
                         processData(response);
                     }
                 });
@@ -147,8 +147,26 @@ public class HomeFragment extends BaseFragment {
             HomeFragmentAdapter adapter=new HomeFragmentAdapter(mContext,resultBean);
             mRvHome.setAdapter(adapter);
 
+            GridLayoutManager manager=new GridLayoutManager(mContext,1);
             //设置布局管理者
-            mRvHome.setLayoutManager(new GridLayoutManager(mContext,1));
+            mRvHome.setLayoutManager(manager);
+
+            //设置跨度大小监听
+            manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup(){
+
+                @Override
+                public int getSpanSize(int position) {
+                    if (position<=3){
+                        //隐藏图标
+                        mIvHome.setVisibility(View.GONE);
+                    }else {
+                        //显示图标
+                        mIvHome.setVisibility(View.VISIBLE);
+                    }
+                    //这里只能返回1
+                    return 1;
+                }
+            });
         }else {
             //没有数据
         }
