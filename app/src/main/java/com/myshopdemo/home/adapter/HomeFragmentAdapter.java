@@ -103,6 +103,8 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
             return new SckillViewHolder(mContext, mLayoutInflater.inflate(R.layout.sckill_item, null));
         }else if (viewType==RECOMMEND){//新品推荐
             return new RecommendViewHolder(mContext,mLayoutInflater.inflate(R.layout.recommend_item,null));
+        }else if (viewType==HOT){//热卖
+            return new HotViewHolder(mContext,mLayoutInflater.inflate(R.layout.hot_item,null));
         }
         return null;
     }
@@ -128,39 +130,39 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
         } else if (getItemViewType(position) == SCKILL) {
             SckillViewHolder sckillViewHolder = (SckillViewHolder) holder;
             sckillViewHolder.setData(resultEntity.getSeckill_info());
-        }else if (getItemViewType(position)==RECOMMEND){
-            RecommendViewHolder recommendViewHolder= (RecommendViewHolder) holder;
+        } else if (getItemViewType(position) == RECOMMEND) {
+            RecommendViewHolder recommendViewHolder = (RecommendViewHolder) holder;
             recommendViewHolder.setData(resultEntity.getRecommend_info());
+        } else if (getItemViewType(position) == HOT) {
+            HotViewHolder hotViewHolder = (HotViewHolder) holder;
+            hotViewHolder.setData(resultEntity.getHot_info());
         }
     }
 
-    /**
-     * 新品推荐的ViewHolder
-     */
-    class RecommendViewHolder extends RecyclerView.ViewHolder{
+    class HotViewHolder extends RecyclerView.ViewHolder{
 
-        private final Context mContext;
-        //声明控件
-        private TextView tv_more_recommend;
-        private GridView gv_recommend;
-        private RecommendGridViewAdapter mAdapter;
+        private final Context  mContext;
+        //声明控件对象
+        private       GridView gv_hot;
+        private       TextView tv_more_hot;
+        private HotGridViewAdapter adapter;
 
-        public RecommendViewHolder(Context context,View itemView) {
+        public HotViewHolder(Context context, View itemView) {
             super(itemView);
-            this.mContext=context;
+            this.mContext = context;
             //实例化控件
-            tv_more_recommend= (TextView) itemView.findViewById(R.id.tv_more_recommend);
-            gv_recommend= (GridView) itemView.findViewById(R.id.gv_recommend);
+            tv_more_hot = (TextView) itemView.findViewById(R.id.tv_more_hot);
+            gv_hot = (GridView) itemView.findViewById(R.id.gv_hot);
         }
 
-        public void setData(List<ResultBeanData.ResultEntity.RecommendInfoEntity> recommend_info) {
-            //有数据了
-            //设置适配器
-            mAdapter=new RecommendGridViewAdapter(mContext,recommend_info);
-            gv_recommend.setAdapter(mAdapter);
+        public void setData(List<ResultBeanData.ResultEntity.HotInfoEntity> data) {
+            adapter=new HotGridViewAdapter(mContext,data);
+            //有数据
+            //设置GridView适配器
+            gv_hot.setAdapter(adapter);
 
-            //设置点击事件
-            gv_recommend.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            //设置条目点击事件
+            gv_hot.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Toast.makeText(mContext,"position="+position,Toast.LENGTH_SHORT).show();
@@ -168,6 +170,42 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
             });
         }
     }
+
+    /**
+     * 新品推荐的ViewHolder
+     */
+    class RecommendViewHolder extends RecyclerView.ViewHolder {
+
+        private final Context                  mContext;
+        //声明控件
+        private       TextView                 tv_more_recommend;
+        private       GridView                 gv_recommend;
+        private       RecommendGridViewAdapter mAdapter;
+
+        public RecommendViewHolder(Context context, View itemView) {
+            super(itemView);
+            this.mContext = context;
+            //实例化控件
+            tv_more_recommend = (TextView) itemView.findViewById(R.id.tv_more_recommend);
+            gv_recommend = (GridView) itemView.findViewById(R.id.gv_recommend);
+        }
+
+        public void setData(List<ResultBeanData.ResultEntity.RecommendInfoEntity> recommend_info) {
+            //有数据了
+            //设置适配器
+            mAdapter = new RecommendGridViewAdapter(mContext, recommend_info);
+            gv_recommend.setAdapter(mAdapter);
+
+            //设置点击事件
+            gv_recommend.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(mContext, "position=" + position, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
     /**
      * 秒杀的ViewHolder
      */
@@ -405,6 +443,6 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         //开发过程中，从1-6
-        return 5;
+        return 6;
     }
 }
