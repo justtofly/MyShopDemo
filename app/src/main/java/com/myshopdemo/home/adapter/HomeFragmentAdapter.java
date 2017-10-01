@@ -101,6 +101,8 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
             return new ActViewHolder(mContext, mLayoutInflater.inflate(R.layout.act_item, null));
         } else if (viewType == SCKILL) {//秒杀
             return new SckillViewHolder(mContext, mLayoutInflater.inflate(R.layout.sckill_item, null));
+        }else if (viewType==RECOMMEND){//新品推荐
+            return new RecommendViewHolder(mContext,mLayoutInflater.inflate(R.layout.recommend_item,null));
         }
         return null;
     }
@@ -126,11 +128,49 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
         } else if (getItemViewType(position) == SCKILL) {
             SckillViewHolder sckillViewHolder = (SckillViewHolder) holder;
             sckillViewHolder.setData(resultEntity.getSeckill_info());
+        }else if (getItemViewType(position)==RECOMMEND){
+            RecommendViewHolder recommendViewHolder= (RecommendViewHolder) holder;
+            recommendViewHolder.setData(resultEntity.getRecommend_info());
         }
     }
 
+    /**
+     * 新品推荐的ViewHolder
+     */
+    class RecommendViewHolder extends RecyclerView.ViewHolder{
 
+        private final Context mContext;
+        //声明控件
+        private TextView tv_more_recommend;
+        private GridView gv_recommend;
+        private RecommendGridViewAdapter mAdapter;
 
+        public RecommendViewHolder(Context context,View itemView) {
+            super(itemView);
+            this.mContext=context;
+            //实例化控件
+            tv_more_recommend= (TextView) itemView.findViewById(R.id.tv_more_recommend);
+            gv_recommend= (GridView) itemView.findViewById(R.id.gv_recommend);
+        }
+
+        public void setData(List<ResultBeanData.ResultEntity.RecommendInfoEntity> recommend_info) {
+            //有数据了
+            //设置适配器
+            mAdapter=new RecommendGridViewAdapter(mContext,recommend_info);
+            gv_recommend.setAdapter(mAdapter);
+
+            //设置点击事件
+            gv_recommend.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(mContext,"position="+position,Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+    /**
+     * 秒杀的ViewHolder
+     */
     class SckillViewHolder extends RecyclerView.ViewHolder {
         private Context                                       mContext;
         //实例化控件
@@ -365,6 +405,6 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         //开发过程中，从1-6
-        return 4;
+        return 5;
     }
 }

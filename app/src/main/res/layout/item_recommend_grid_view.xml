@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/iv_recommend"
+        android:src="@drawable/logo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"/>
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_marginLeft="3dp"
+        android:lines="2"
+        android:textColor="#000"
+        android:ellipsize="end"
+        android:text="最新款，超美衣服，特价，小衣裙"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tv_price"
+        android:textColor="#ff4242"
+        android:text="￥888.00"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
