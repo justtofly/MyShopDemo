@@ -2,6 +2,7 @@ package com.myshopdemo.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.myshopdemo.R;
 import com.myshopdemo.home.bean.GoodsBean;
+import com.myshopdemo.shoppingcart.utils.CartStorage;
 import com.myshopdemo.utils.Constants;
 
 /**
@@ -104,7 +106,10 @@ public class GoodsInfoActivity extends Activity implements View.OnClickListener 
             Toast.makeText(this,"更多",Toast.LENGTH_SHORT).show();
         } else if ( v == btnGoodInfoAddcart ) {
             // Handle clicks for btnGoodInfoAddcart
-            Toast.makeText(this,"加入购物车",Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this,"加入购物车",Toast.LENGTH_SHORT).show();
+            CartStorage.getInstance().addDate(mGoodsBean);
+            Toast.makeText(this, "成功添加到了购物车", Toast.LENGTH_SHORT).show();
+            Log.e("TAG","添加的商品：mGoodsBean=="+mGoodsBean);
         }else if(v==tvGoodInfoCallcenter){
             Toast.makeText(this,"联系客服",Toast.LENGTH_SHORT).show();
         }else if(v==tvGoodInfoCollection){
@@ -131,7 +136,7 @@ public class GoodsInfoActivity extends Activity implements View.OnClickListener 
         //接收数据
         mGoodsBean= (GoodsBean) getIntent().getSerializableExtra("goodsBean");
         if (mGoodsBean!=null){
-            Toast.makeText(this,"goodsBean=="+mGoodsBean.toString(),Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this,"goodsBean=="+mGoodsBean.toString(),Toast.LENGTH_SHORT).show();
             setDataForView(mGoodsBean);
         }
     }

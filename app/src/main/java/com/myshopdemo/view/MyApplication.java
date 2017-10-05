@@ -1,6 +1,7 @@
 package com.myshopdemo.view;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.zhy.http.okhttp.OkHttpUtils;
 
@@ -21,9 +22,16 @@ import okhttp3.OkHttpClient;
  * 更新描述   ${TODO}
  */
 public class MyApplication extends Application {
+
+    private static Context mContex;
+    public static Context getcoContext(){
+        return mContex;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        mContex=this;
         /**
          * 初始化OkHttpUtils
          */

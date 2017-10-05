@@ -34,4 +34,5 @@ dependencies {
     compile 'com.youth.banner:banner:1.4.10'
     //最新版本
     compile files('D:/project_as/month_8/MyShopDemo/library/glide-3.7.0.jar')
+    compile 'com.google.code.gson:gson:2.8.2'
 }

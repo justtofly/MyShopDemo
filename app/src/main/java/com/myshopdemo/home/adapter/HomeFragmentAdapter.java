@@ -7,7 +7,6 @@ import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -259,7 +258,7 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
                     dt = dt - 1000;
                     //把毫秒变成小时的工具
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-                    Log.e("TAG", "秒杀时间:" + sdf.format(new Date(dt)));
+//                    Log.e("TAG", "秒杀时间:" + sdf.format(new Date(dt)));
                     String time = sdf.format(new Date(dt));
                     tv_time_seckill.setText(time);
 
