@@ -3,7 +3,9 @@ package com.myshopdemo.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -11,8 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.myshopdemo.R;
 import com.myshopdemo.home.bean.GoodsBean;
+import com.myshopdemo.utils.Constants;
 
 /**
  * 创建者     yangyanfei
@@ -25,20 +29,20 @@ import com.myshopdemo.home.bean.GoodsBean;
  * 更新描述   ${TODO}
  */
 public class GoodsInfoActivity extends Activity implements View.OnClickListener {
-    private ImageButton ibGoodInfoBack;
-    private ImageButton ibGoodInfoMore;
-    private ImageView ivGoodInfoImage;
-    private TextView tvGoodInfoName;
-    private TextView tvGoodInfoDesc;
-    private TextView tvGoodInfoPrice;
-    private TextView tvGoodInfoStore;
-    private TextView tvGoodInfoStyle;
-    private WebView wbGoodMore;
+    private ImageButton  ibGoodInfoBack;
+    private ImageButton  ibGoodInfoMore;
+    private ImageView    ivGoodInfoImage;
+    private TextView     tvGoodInfoName;
+    private TextView     tvGoodInfoDesc;
+    private TextView     tvGoodInfoPrice;
+    private TextView     tvGoodInfoStore;
+    private TextView     tvGoodInfoStyle;
+    private WebView      wbGoodMore;
     private LinearLayout llGoodsRoot;
-    private TextView tvGoodInfoCallcenter;
-    private TextView tvGoodInfoCollection;
-    private TextView tvGoodInfoCart;
-    private Button btnGoodInfoAddcart;
+    private TextView     tvGoodInfoCallcenter;
+    private TextView     tvGoodInfoCollection;
+    private TextView     tvGoodInfoCart;
+    private Button       btnGoodInfoAddcart;
 
     private TextView tv_more_share;
     private TextView tv_more_search;
@@ -53,12 +57,12 @@ public class GoodsInfoActivity extends Activity implements View.OnClickListener 
      * (http://www.buzzingandroid.com/tools/android-layout-finder)
      */
     private void findViews() {
-        ibGoodInfoBack = (ImageButton)findViewById( R.id.ib_good_info_back );
-        ibGoodInfoMore = (ImageButton)findViewById( R.id.ib_good_info_more );
-        ivGoodInfoImage = (ImageView)findViewById( R.id.iv_good_info_image );
-        tvGoodInfoName = (TextView)findViewById( R.id.tv_good_info_name );
-        tvGoodInfoDesc = (TextView)findViewById( R.id.tv_good_info_desc );
-        tvGoodInfoPrice = (TextView)findViewById( R.id.tv_good_info_price );
+        ibGoodInfoBack = (ImageButton) findViewById(R.id.ib_good_info_back);
+        ibGoodInfoMore = (ImageButton) findViewById(R.id.ib_good_info_more);
+        ivGoodInfoImage = (ImageView) findViewById(R.id.iv_good_info_image);
+        tvGoodInfoName = (TextView) findViewById(R.id.tv_good_info_name);
+        tvGoodInfoDesc = (TextView) findViewById(R.id.tv_good_info_desc);
+        tvGoodInfoPrice = (TextView) findViewById(R.id.tv_good_info_price);
         tvGoodInfoStore = (TextView)findViewById( R.id.tv_good_info_store );
         tvGoodInfoStyle = (TextView)findViewById( R.id.tv_good_info_style );
         wbGoodMore = (WebView)findViewById( R.id.wb_good_more );
@@ -128,6 +132,51 @@ public class GoodsInfoActivity extends Activity implements View.OnClickListener 
         mGoodsBean= (GoodsBean) getIntent().getSerializableExtra("goodsBean");
         if (mGoodsBean!=null){
             Toast.makeText(this,"goodsBean=="+mGoodsBean.toString(),Toast.LENGTH_SHORT).show();
+            setDataForView(mGoodsBean);
+        }
+    }
+
+    private void setDataForView(GoodsBean goodsBean) {
+        //设置图片,使用Glide加载图片
+        Glide.with(this).load(Constants.BASE_URL_IMAGE+mGoodsBean.getFigure()).into(ivGoodInfoImage);
+
+        //设置文本
+        tvGoodInfoName.setText(goodsBean.getName());
+
+        //设置价格
+        tvGoodInfoPrice.setText(goodsBean.getCover_price());
+
+        setWebViewData(goodsBean.getProduct_id());
+    }
+
+    //webview数据的设置加载H5页面,java与javascript的互调
+    private void setWebViewData(String product_id) {
+        if (product_id!=null){
+            wbGoodMore.loadUrl("http://www.baidu.com");
+            //设置支持JavaScript
+            WebSettings webSettings=wbGoodMore.getSettings();
+            webSettings.setUseWideViewPort(true);//支持双击页面变大变小
+            webSettings.setJavaScriptEnabled(true);//设置支持javascript
+
+            //优先使用缓存
+            webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+
+            wbGoodMore.setWebViewClient(new WebViewClient(){
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    view.loadUrl(url);
+                    return true;
+                }
+
+                /*@Override
+                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+                        view.loadUrl(request.getUrl().toString());
+                    }
+//                    return super.shouldOverrideUrlLoading(view, url);
+                    return true;
+                }*/
+            });
         }
     }
 }
