@@ -1,1 +1,2 @@
 include ':app', ':xutils', ':xUtils3-sample', ':integration:recyclerview', ':integration:okhttp', ':integration:okhttp3'
+include ':tBViewer'

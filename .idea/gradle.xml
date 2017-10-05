@@ -14,6 +14,7 @@
             <option value="$PROJECT_DIR$/integration/okhttp" />
             <option value="$PROJECT_DIR$/integration/okhttp3" />
             <option value="$PROJECT_DIR$/integration/recyclerview" />
+            <option value="$PROJECT_DIR$/tBViewer" />
             <option value="$PROJECT_DIR$/xUtils3-sample" />
             <option value="$PROJECT_DIR$/xutils" />
           </set>
