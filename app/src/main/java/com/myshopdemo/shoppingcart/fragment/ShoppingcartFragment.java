@@ -1,9 +1,11 @@
 package com.myshopdemo.shoppingcart.fragment;
 
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,13 +38,13 @@ public class ShoppingcartFragment extends BaseFragment implements View.OnClickLi
     private CheckBox     cbAll;
     private Button       btnDelete;
     private Button       btnCollection;
+    private RecyclerView recyclerview_shopcart;
 
-    /**
-     * Find the Views in the layout<br />
-     * <br />
-     * Auto-created on 2017-10-06 10:22:01 by Android Layout Finder
-     * (http://www.buzzingandroid.com/tools/android-layout-finder)
-     */
+    private ImageView ivEmpty;
+    private TextView  tvEmptyCartTobuy;
+    private LinearLayout ll_empty_shopcart;
+
+
     private void findViews(View view) {
         rlEditShopcart = (TextView) view.findViewById(R.id.rl_edit_shopcart);
         llCheckAll = (LinearLayout) view.findViewById(R.id.ll_check_all);
@@ -53,10 +55,16 @@ public class ShoppingcartFragment extends BaseFragment implements View.OnClickLi
         cbAll = (CheckBox)view.findViewById(R.id.cb_all);
         btnDelete = (Button)view.findViewById(R.id.btn_delete);
         btnCollection = (Button)view.findViewById(R.id.btn_collection);
+        recyclerview_shopcart = (RecyclerView)view.findViewById(R.id.recyclerview_shopcart);
+
+        ivEmpty = (ImageView) view.findViewById(R.id.iv_empty);
+        tvEmptyCartTobuy = (TextView) view.findViewById(R.id.tv_empty_cart_tobuy);
+        ll_empty_shopcart = (LinearLayout) view.findViewById(R.id.ll_empty_shopcart);
 
         btnShopcartCheckOut.setOnClickListener( this );
         btnDelete.setOnClickListener( this );
         btnCollection.setOnClickListener( this );
+        rlEditShopcart.setOnClickListener( this );
     }
 
     /**
@@ -103,6 +111,23 @@ public class ShoppingcartFragment extends BaseFragment implements View.OnClickLi
         List<GoodsBean> goodsBeanList= CartStorage.getInstance().getAllData();
         for (int i = 0; i < goodsBeanList.size(); i++) {
             Log.e("TAG","ShoppingcartFragment:获取到的存储的商品数据=="+goodsBeanList.get(i).toString());
+
+            //购物车有数据了，显示数据
+            showData();
+        }
+    }
+
+    private void showData() {
+        List<GoodsBean> goodsBeanList=CartStorage.getInstance().getAllData();
+        if (goodsBeanList!=null&&goodsBeanList.size()>0){
+            //有数据
+            //把没有数据的布局隐藏，有数据的布局显示
+            ll_empty_shopcart.setVisibility(View.GONE);
+            //设置适配器
+//            recyclerview_shopcart.setAdapter();
+        }else {
+            //没有数据，显示数据为空的布局
+            ll_empty_shopcart.setVisibility(View.VISIBLE);
         }
     }
 }
