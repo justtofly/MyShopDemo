@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.myshopdemo.R;
 import com.myshopdemo.base.BaseFragment;
 import com.myshopdemo.home.bean.GoodsBean;
+import com.myshopdemo.shoppingcart.adapter.ShoppingCartAdapter;
 import com.myshopdemo.shoppingcart.utils.CartStorage;
 
 import java.util.List;
@@ -40,9 +41,14 @@ public class ShoppingcartFragment extends BaseFragment implements View.OnClickLi
     private Button       btnCollection;
     private RecyclerView recyclerview_shopcart;
 
-    private ImageView ivEmpty;
-    private TextView  tvEmptyCartTobuy;
+    private ImageView    ivEmpty;
+    private TextView     tvEmptyCartTobuy;
     private LinearLayout ll_empty_shopcart;
+
+    /**
+     * 创建购物车商品适配器对象
+     */
+    private ShoppingCartAdapter mShoppingCartAdapter;
 
 
     private void findViews(View view) {
@@ -50,12 +56,12 @@ public class ShoppingcartFragment extends BaseFragment implements View.OnClickLi
         llCheckAll = (LinearLayout) view.findViewById(R.id.ll_check_all);
         checkboxAll = (CheckBox) view.findViewById(R.id.checkbox_all);
         tvShopcartTotal = (TextView) view.findViewById(R.id.tv_shopcart_total);
-        btnShopcartCheckOut = (Button)view.findViewById(R.id.btn_shopcart_check_out);
-        llDelete = (LinearLayout)view.findViewById(R.id.ll_delete);
-        cbAll = (CheckBox)view.findViewById(R.id.cb_all);
-        btnDelete = (Button)view.findViewById(R.id.btn_delete);
-        btnCollection = (Button)view.findViewById(R.id.btn_collection);
-        recyclerview_shopcart = (RecyclerView)view.findViewById(R.id.recyclerview_shopcart);
+        btnShopcartCheckOut = (Button) view.findViewById(R.id.btn_shopcart_check_out);
+        llDelete = (LinearLayout) view.findViewById(R.id.ll_delete);
+        cbAll = (CheckBox) view.findViewById(R.id.cb_all);
+        btnDelete = (Button) view.findViewById(R.id.btn_delete);
+        btnCollection = (Button) view.findViewById(R.id.btn_collection);
+        recyclerview_shopcart = (RecyclerView) view.findViewById(R.id.recyclerview_shopcart);
 
         ivEmpty = (ImageView) view.findViewById(R.id.iv_empty);
         tvEmptyCartTobuy = (TextView) view.findViewById(R.id.tv_empty_cart_tobuy);
@@ -123,8 +129,10 @@ public class ShoppingcartFragment extends BaseFragment implements View.OnClickLi
             //有数据
             //把没有数据的布局隐藏，有数据的布局显示
             ll_empty_shopcart.setVisibility(View.GONE);
+            //实例化购物车商品适配器,两个参数：上下文和数据（集合）
+            mShoppingCartAdapter=new ShoppingCartAdapter(mContext,goodsBeanList);
             //设置适配器
-//            recyclerview_shopcart.setAdapter();
+            recyclerview_shopcart.setAdapter(mShoppingCartAdapter);
         }else {
             //没有数据，显示数据为空的布局
             ll_empty_shopcart.setVisibility(View.VISIBLE);
