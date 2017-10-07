@@ -106,6 +106,25 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter {
                 notifyItemChanged(position);
                 //4.再次计算总价格
                 showTotalPrice();
+
+                //设置点击事件
+                setListener();
+            }
+        });
+    }
+
+    private void setListener() {
+        setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                //1.根据位置得到对应的Bean对象
+                GoodsBean goodsBean = datas.get(position);
+                //2.设置取反状态
+                goodsBean.setSelected(!goodsBean.isSelected());
+                //3.刷新状态
+                notifyItemChanged(position);
+                //4.重新计算总价格
+                showTotalPrice();
             }
         });
     }
@@ -133,6 +152,36 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter {
             tv_price_gov= (TextView) itemView.findViewById(R.id.tv_price_gov);
             numberAddSubView= (AddSubView) itemView.findViewById(R.id.numberAddSubView);
 
+            //设置item的点击事件
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mOnItemClickListener!=null){
+                        mOnItemClickListener.onItemClick(getLayoutPosition());
+                    }
+                }
+            });
         }
+    }
+
+    /**
+     * 点击item的监听
+     */
+    public interface OnItemClickListener{
+        /**
+         * 当点击某个条目的时候回调
+         * @param position
+         */
+        public void onItemClick(int position);
+    }
+    //创建接口对象
+    private OnItemClickListener mOnItemClickListener;
+
+    /**
+     * 设置item的监听
+     * @param onItemClickListener
+     */
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+        this.mOnItemClickListener=onItemClickListener;
     }
 }
