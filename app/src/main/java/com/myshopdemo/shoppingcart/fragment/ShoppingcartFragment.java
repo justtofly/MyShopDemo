@@ -1,5 +1,6 @@
 package com.myshopdemo.shoppingcart.fragment;
 
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -130,9 +131,12 @@ public class ShoppingcartFragment extends BaseFragment implements View.OnClickLi
             //把没有数据的布局隐藏，有数据的布局显示
             ll_empty_shopcart.setVisibility(View.GONE);
             //实例化购物车商品适配器,两个参数：上下文和数据（集合）
-            mShoppingCartAdapter=new ShoppingCartAdapter(mContext,goodsBeanList);
+            mShoppingCartAdapter=new ShoppingCartAdapter(mContext,goodsBeanList,tvShopcartTotal,checkboxAll);
             //设置适配器
             recyclerview_shopcart.setAdapter(mShoppingCartAdapter);
+
+            //设置布局管理器
+            recyclerview_shopcart.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false));
         }else {
             //没有数据，显示数据为空的布局
             ll_empty_shopcart.setVisibility(View.VISIBLE);

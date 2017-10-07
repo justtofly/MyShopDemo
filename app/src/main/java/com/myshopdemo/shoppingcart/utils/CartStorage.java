@@ -88,16 +88,23 @@ public class CartStorage {
         saveLocal();
     }
 
+    public void updateData(GoodsBean goodsBean){
+        //内存中更新
+        mSparseArray.put(Integer.parseInt(goodsBean.getProduct_id()),goodsBean);
+
+        //同步到本地
+        saveLocal();
+    }
     /**
      * 保存数据到本地
      */
-    private void saveLocal() {
+    public void saveLocal() {
         //1.SparseArray转换成list
         List<GoodsBean> goodsBeanList=sparseToList();
         //2.使用Gson把列表转换成String类型
         String json=new Gson().toJson(goodsBeanList);
         //3.把String数据保存
-        CacheUtils.saveString(mContext,JSON_CART,json);
+        CacheUtils.saveString(mContext, JSON_CART, json);
     }
 
     private List<GoodsBean> sparseToList() {

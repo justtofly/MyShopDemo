@@ -22,7 +22,20 @@ public class GoodsBean implements Serializable {
     //产品id
     private String product_id;
 
-    private int number=1;
+    private int number = 1;
+
+    /**
+     * 是否被选中
+     */
+    private boolean isSelected = true;
+    public boolean isSelected(){
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected){
+        isSelected=selected;
+    }
+
 
     public int getNumber() {
         return number;
