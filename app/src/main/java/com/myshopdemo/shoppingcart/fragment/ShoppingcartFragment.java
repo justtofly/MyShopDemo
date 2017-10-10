@@ -30,6 +30,8 @@ import java.util.List;
  * 更新描述   ${TODO}
  */
 public class ShoppingcartFragment extends BaseFragment implements View.OnClickListener {
+    private static final int ACTION_EDIT     = 0;
+    private static final int ACTION_COMPLETE = 1;
     //    TextView textView;
     private TextView     rlEditShopcart;
     private LinearLayout llCheckAll;
@@ -71,7 +73,7 @@ public class ShoppingcartFragment extends BaseFragment implements View.OnClickLi
         btnShopcartCheckOut.setOnClickListener( this );
         btnDelete.setOnClickListener( this );
         btnCollection.setOnClickListener( this );
-        rlEditShopcart.setOnClickListener( this );
+//        rlEditShopcart.setOnClickListener( this );
     }
 
     /**
@@ -90,10 +92,10 @@ public class ShoppingcartFragment extends BaseFragment implements View.OnClickLi
         } else if ( v == btnCollection ) {//收藏
             Toast.makeText(mContext,"收藏",Toast.LENGTH_SHORT).show();
             // Handle clicks for btnCollection
-        }else if ( v == rlEditShopcart ) {//编辑
+        }/*else if ( v == rlEditShopcart ) {//编辑
             Toast.makeText(mContext,"编辑",Toast.LENGTH_SHORT).show();
             // Handle clicks for btnCollection
-        }
+        }*/
     }
 
 
@@ -107,7 +109,55 @@ public class ShoppingcartFragment extends BaseFragment implements View.OnClickLi
         View view=View.inflate(mContext, R.layout.fragment_shopping_cart,null);
         findViews(view);
 
+        initListener();
+
         return view;
+    }
+
+    private void initListener() {
+        //设置默认为编辑状态
+        rlEditShopcart.setTag(ACTION_EDIT);
+        rlEditShopcart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int action = (int) v.getTag();
+                if(action==ACTION_EDIT){
+                    showDelete();
+                }else if (action==ACTION_COMPLETE){
+                    hideDelete();
+                }
+            }
+        });
+    }
+    private void hideDelete(){
+        //1.设置状态和文本-编辑
+        rlEditShopcart.setTag(ACTION_EDIT);
+        rlEditShopcart.setText("编辑");
+        //2.变成勾选
+        if(mShoppingCartAdapter!=null){
+            mShoppingCartAdapter.checkAll_none(true);
+        }
+        //3.删除视图隐藏
+        llDelete.setVisibility(View.GONE);
+        //4.结算视图显示
+        llCheckAll.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * 点击编辑控件，显示删除视图，隐藏结算视图
+     */
+    private void showDelete(){
+        //1.设置状态和文本-完成
+        rlEditShopcart.setTag(ACTION_COMPLETE);
+        rlEditShopcart.setText("完成");
+        //2.变成非勾选
+        if(mShoppingCartAdapter!=null){
+            mShoppingCartAdapter.checkAll_none(false);
+        }
+        //3.删除视图显示
+        llDelete.setVisibility(View.VISIBLE);
+        //4.结算视图隐藏
+        llCheckAll.setVisibility(View.GONE);
     }
 
     @Override
