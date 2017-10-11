@@ -184,4 +184,19 @@ public class GoodsInfoActivity extends Activity implements View.OnClickListener 
             });
         }
     }
+
+    /**
+     * 当商品被添加的时候的监听
+     */
+    /*public interface OnAddClickListener{
+        *//**
+         * 当被添加的时候，回调这个方法
+         *//*
+        public void onAddClick();
+    }
+    //创建接口对象
+    private OnAddClickListener mOnAddClickListener;
+    public void setOnAddClickListener(OnAddClickListener onAddClickListener){
+        this.mOnAddClickListener=onAddClickListener;
+    }*/
 }

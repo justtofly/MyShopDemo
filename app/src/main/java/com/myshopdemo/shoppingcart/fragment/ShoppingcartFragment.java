@@ -142,6 +142,8 @@ public class ShoppingcartFragment extends BaseFragment implements View.OnClickLi
         if(mShoppingCartAdapter!=null){
             mShoppingCartAdapter.checkAll_none(true);
             mShoppingCartAdapter.checkAll();
+            //计算并显示总价格
+            mShoppingCartAdapter.showTotalPrice();
         }
         //3.删除视图隐藏
         llDelete.setVisibility(View.GONE);
@@ -203,4 +205,6 @@ public class ShoppingcartFragment extends BaseFragment implements View.OnClickLi
             ll_empty_shopcart.setVisibility(View.VISIBLE);
         }
     }
+
+
 }

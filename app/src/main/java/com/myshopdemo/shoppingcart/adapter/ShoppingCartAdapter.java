@@ -54,7 +54,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter {
         showTotalPrice();
     }
 
-    private void showTotalPrice() {
+    public void showTotalPrice() {
         tvShopcartTotal.setText("合计：" + getTotalPrice());
     }
 
