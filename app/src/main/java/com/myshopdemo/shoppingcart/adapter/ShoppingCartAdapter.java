@@ -113,11 +113,11 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter {
                 //4.再次计算总价格
                 showTotalPrice();
 
-//                //设置点击事件
-//                setListener();
-//
-//                //检验是否全选
-//                checkAll();
+                //                //设置点击事件
+                //                setListener();
+                //
+                //                //检验是否全选
+                //                checkAll();
             }
         });
 
@@ -149,9 +149,9 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter {
         checkboxAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(mContext,"全选和非全选",Toast.LENGTH_SHORT).show();
+                //                Toast.makeText(mContext,"全选和非全选",Toast.LENGTH_SHORT).show();
                 //1.得到状态,遍历购物车所有商品,当isCheck为true,就设置全选，如果isCheck为false，就全不选
-                boolean isCheck=checkboxAll.isChecked();
+                boolean isCheck = checkboxAll.isChecked();
                 //2.根据状态设置全选和非全选
                 checkAll_none(isCheck);
                 //3.计算总价格
@@ -161,9 +161,9 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter {
         cbAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(mContext,"全选和非全选",Toast.LENGTH_SHORT).show();
+                //                Toast.makeText(mContext,"全选和非全选",Toast.LENGTH_SHORT).show();
                 //1.得到状态,遍历购物车所有商品,当isCheck为true,就设置全选，如果isCheck为false，就全不选
-                boolean isCheck=cbAll.isChecked();
+                boolean isCheck = cbAll.isChecked();
                 //2.根据状态设置全选和非全选
                 checkAll_none(isCheck);
                 //3.计算总价格
@@ -174,12 +174,13 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter {
 
     /**
      * 设置全选和非全选
+     *
      * @param isCheck
      */
     public void checkAll_none(boolean isCheck) {
-        if(datas!=null&&datas.size()>0){
+        if (datas != null && datas.size() > 0) {
             for (int i = 0; i < datas.size(); i++) {
-                GoodsBean goodsBean=datas.get(i);
+                GoodsBean goodsBean = datas.get(i);
                 goodsBean.setSelected(isCheck);
                 notifyItemChanged(i);
             }
@@ -200,16 +201,16 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter {
                 } else {
                     //选中的
                     number++;
-//                    Log.e("TAG",""+number);
+                    //                    Log.e("TAG",""+number);
                 }
                 if (number == datas.size()) {
                     //全选
                     checkboxAll.setChecked(true);
                     cbAll.setChecked(true);
-//                    Log.e("TAG","number == datas.size()"+datas.size());
+                    //                    Log.e("TAG","number == datas.size()"+datas.size());
                 }
             }
-        }else {
+        } else {
             //假如没有数据
             checkboxAll.setChecked(false);
             cbAll.setChecked(false);
@@ -219,6 +220,24 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         return datas.size();
+    }
+
+    public void deleteDta() {
+        if (datas != null && datas.size() > 0) {
+            for (int i = 0; i < datas.size(); i++) {
+                GoodsBean goodsBean = datas.get(i);
+                //删除选中
+                if (goodsBean.isSelected()) {
+                    //内存中移除
+                    datas.remove(goodsBean);
+                    //保存在本地
+                    CartStorage.getInstance().deleteData(goodsBean);
+                    //刷新
+                    notifyItemChanged(i);
+                    i--;
+                }
+            }
+        }
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

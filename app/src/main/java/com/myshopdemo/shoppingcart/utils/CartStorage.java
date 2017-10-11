@@ -130,4 +130,14 @@ public class CartStorage {
         }
         return goodsBeanList;
     }
+
+    public void deleteData(GoodsBean goodsBean) {
+        //删除数据
+
+        mSparseArray.delete(Integer.parseInt(goodsBean.getProduct_id()));
+
+
+        //保存数据
+        saveLocal();
+    }
 }
