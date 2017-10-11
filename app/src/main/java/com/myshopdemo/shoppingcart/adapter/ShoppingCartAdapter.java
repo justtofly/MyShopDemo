@@ -222,7 +222,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter {
         return datas.size();
     }
 
-    public void deleteDta() {
+    public void deleteData() {
         if (datas != null && datas.size() > 0) {
             for (int i = 0; i < datas.size(); i++) {
                 GoodsBean goodsBean = datas.get(i);
@@ -233,7 +233,8 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter {
                     //保存在本地
                     CartStorage.getInstance().deleteData(goodsBean);
                     //刷新
-                    notifyItemChanged(i);
+//                    notifyItemChanged(i);//出现bug,点击删除，闪退
+                    notifyItemRemoved(i);
                     i--;
                 }
             }

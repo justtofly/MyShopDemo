@@ -88,7 +88,7 @@ public class ShoppingcartFragment extends BaseFragment implements View.OnClickLi
             Toast.makeText(mContext,"去结算",Toast.LENGTH_SHORT).show();
         } else if ( v == btnDelete ) {//删除
 //            Toast.makeText(mContext,"删除",Toast.LENGTH_SHORT).show();
-            mShoppingCartAdapter.deleteDta();
+            mShoppingCartAdapter.deleteData();
             //校验全选
             mShoppingCartAdapter.checkAll();
         } else if ( v == btnCollection ) {//收藏
