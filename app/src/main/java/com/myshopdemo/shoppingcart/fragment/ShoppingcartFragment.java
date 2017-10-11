@@ -123,6 +123,9 @@ public class ShoppingcartFragment extends BaseFragment implements View.OnClickLi
                 int action = (int) v.getTag();
                 if(action==ACTION_EDIT){
                     showDelete();
+
+
+
                 }else if (action==ACTION_COMPLETE){
                     hideDelete();
                 }
@@ -136,6 +139,7 @@ public class ShoppingcartFragment extends BaseFragment implements View.OnClickLi
         //2.变成勾选
         if(mShoppingCartAdapter!=null){
             mShoppingCartAdapter.checkAll_none(true);
+            mShoppingCartAdapter.checkAll();
         }
         //3.删除视图隐藏
         llDelete.setVisibility(View.GONE);
@@ -153,6 +157,8 @@ public class ShoppingcartFragment extends BaseFragment implements View.OnClickLi
         //2.变成非勾选
         if(mShoppingCartAdapter!=null){
             mShoppingCartAdapter.checkAll_none(false);
+            //检验是否全选
+            mShoppingCartAdapter.checkAll();
         }
         //3.删除视图显示
         llDelete.setVisibility(View.VISIBLE);
@@ -181,7 +187,10 @@ public class ShoppingcartFragment extends BaseFragment implements View.OnClickLi
             //把没有数据的布局隐藏，有数据的布局显示
             ll_empty_shopcart.setVisibility(View.GONE);
             //实例化购物车商品适配器,两个参数：上下文和数据（集合）
-            mShoppingCartAdapter=new ShoppingCartAdapter(mContext,goodsBeanList,tvShopcartTotal,checkboxAll);
+            /**
+             * tvShopcartTotal总价格,checkboxAll编辑状态下选择框，cbAll完成状态下的选择框
+             */
+            mShoppingCartAdapter=new ShoppingCartAdapter(mContext,goodsBeanList,tvShopcartTotal,checkboxAll,cbAll);
             //设置适配器
             recyclerview_shopcart.setAdapter(mShoppingCartAdapter);
 

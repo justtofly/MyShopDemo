@@ -35,15 +35,20 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter {
      */
     private final TextView        tvShopcartTotal;
     /**
-     * 全选
+     * 完成状态下全选选择框
+     */
+    private final CheckBox        cbAll;
+    /**
+     * 编辑状态下全选选择框
      */
     private       CheckBox        checkboxAll;
 
-    public ShoppingCartAdapter(Context context, List<GoodsBean> goodsBeanList, TextView tvShopcartTotal, CheckBox checkboxAll) {
+    public ShoppingCartAdapter(Context context, List<GoodsBean> goodsBeanList, TextView tvShopcartTotal, CheckBox checkboxAll, CheckBox cbAll) {
         this.mContext = context;
         this.datas = goodsBeanList;
         this.tvShopcartTotal = tvShopcartTotal;
         this.checkboxAll = checkboxAll;
+        this.cbAll = cbAll;
 
         //显示所有价格
         showTotalPrice();
@@ -153,6 +158,18 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter {
                 showTotalPrice();
             }
         });
+        cbAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Toast.makeText(mContext,"全选和非全选",Toast.LENGTH_SHORT).show();
+                //1.得到状态,遍历购物车所有商品,当isCheck为true,就设置全选，如果isCheck为false，就全不选
+                boolean isCheck=cbAll.isChecked();
+                //2.根据状态设置全选和非全选
+                checkAll_none(isCheck);
+                //3.计算总价格
+                showTotalPrice();
+            }
+        });
     }
 
     /**
@@ -170,7 +187,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter {
     }
 
 
-    private void checkAll() {
+    public void checkAll() {
         if (datas != null && datas.size() > 0) {
             //number初始值为0
             int number = 0;
@@ -179,6 +196,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter {
                 if (!goodsBean.isSelected()) {
                     //非全选
                     checkboxAll.setChecked(false);
+                    cbAll.setChecked(false);
                 } else {
                     //选中的
                     number++;
@@ -187,9 +205,14 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter {
                 if (number == datas.size()) {
                     //全选
                     checkboxAll.setChecked(true);
+                    cbAll.setChecked(true);
 //                    Log.e("TAG","number == datas.size()"+datas.size());
                 }
             }
+        }else {
+            //假如没有数据
+            checkboxAll.setChecked(false);
+            cbAll.setChecked(false);
         }
     }
 
