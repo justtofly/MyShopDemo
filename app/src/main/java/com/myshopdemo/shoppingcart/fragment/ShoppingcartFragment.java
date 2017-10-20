@@ -48,6 +48,8 @@ public class ShoppingcartFragment extends BaseFragment implements View.OnClickLi
     private TextView     tvEmptyCartTobuy;
     private LinearLayout ll_empty_shopcart;
 
+    private LinearLayout ll_notempty_cart;
+
     /**
      * 创建购物车商品适配器对象
      */
@@ -69,6 +71,7 @@ public class ShoppingcartFragment extends BaseFragment implements View.OnClickLi
         ivEmpty = (ImageView) view.findViewById(R.id.iv_empty);
         tvEmptyCartTobuy = (TextView) view.findViewById(R.id.tv_empty_cart_tobuy);
         ll_empty_shopcart = (LinearLayout) view.findViewById(R.id.ll_empty_shopcart);
+        ll_notempty_cart = (LinearLayout) view.findViewById(R.id.ll_notempty_cart);
 
         btnShopcartCheckOut.setOnClickListener( this );
         btnDelete.setOnClickListener( this );
@@ -123,12 +126,11 @@ public class ShoppingcartFragment extends BaseFragment implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 int action = (int) v.getTag();
-                if(action==ACTION_EDIT){
+                if (action == ACTION_EDIT) {
                     showDelete();
 
 
-
-                }else if (action==ACTION_COMPLETE){
+                } else if (action == ACTION_COMPLETE) {
                     hideDelete();
                 }
             }
@@ -184,26 +186,41 @@ public class ShoppingcartFragment extends BaseFragment implements View.OnClickLi
         }
     }
 
+    /**
+     * 当Fragment可见的时候，回调这个方法，加载数据
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        showData();
+    }
+
     private void showData() {
         List<GoodsBean> goodsBeanList=CartStorage.getInstance().getAllData();
         if (goodsBeanList!=null&&goodsBeanList.size()>0){
             //有数据
             //把没有数据的布局隐藏，有数据的布局显示
+            ll_notempty_cart.setVisibility(View.VISIBLE);
             ll_empty_shopcart.setVisibility(View.GONE);
             //实例化购物车商品适配器,两个参数：上下文和数据（集合）
             /**
              * tvShopcartTotal总价格,checkboxAll编辑状态下选择框，cbAll完成状态下的选择框
              */
             mShoppingCartAdapter=new ShoppingCartAdapter(mContext,goodsBeanList,tvShopcartTotal,checkboxAll,cbAll);
+            //设置布局管理器
+            recyclerview_shopcart.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
             //设置适配器
             recyclerview_shopcart.setAdapter(mShoppingCartAdapter);
-
-            //设置布局管理器
-            recyclerview_shopcart.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false));
         }else {
             //没有数据，显示数据为空的布局
-            ll_empty_shopcart.setVisibility(View.VISIBLE);
+//            ll_empty_shopcart.setVisibility(View.VISIBLE);
+            emptyShoppingCart();
         }
+    }
+
+    private void emptyShoppingCart() {
+        ll_empty_shopcart.setVisibility(View.VISIBLE);
+        ll_notempty_cart.setVisibility(View.GONE);
     }
 
 

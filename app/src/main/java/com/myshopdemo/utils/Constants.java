@@ -11,7 +11,7 @@ package com.myshopdemo.utils;
  * 更新描述   ${TODO}
  */
 public class Constants {
-    public static String BASE_URL       = "http://192.168.1.100:8080/atguigu";
+    public static String BASE_URL       = "http://192.168.3.100:8080/atguigu";
     /**
      * 主页面的路径
      */

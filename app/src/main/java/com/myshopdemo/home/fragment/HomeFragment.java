@@ -100,6 +100,7 @@ public class HomeFragment extends BaseFragment {
      */
     private void getDataFromNet() {
         String url = Constants.HOME_URL;
+//        String url="http://www.baidu.com";
 //        String url = "http://192.168.1.100:8080/smoke.jpg";   //请求成功
 
         Log.e("TAG", "url=" + url);
@@ -131,6 +132,7 @@ public class HomeFragment extends BaseFragment {
                         processData(response);
                     }
                 });
+
     }
 
     /**
